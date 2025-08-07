@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퀴즈 공유</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Loading State -->
+        <div id="loading" class="loading-screen">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <h2>퀴즈를 불러오는 중...</h2>
+                <p>잠시만 기다려주세요</p>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="error" class="error-screen" style="display: none;">
+            <div class="error-content">
+                <div class="error-icon">❌</div>
+                <h2>퀴즈를 불러올 수 없습니다</h2>
+                <p>링크가 올바르지 않거나 손상되었습니다.</p>
+                <button onclick="location.reload()" class="retry-btn">다시 시도</button>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" style="display: none;">
+            <!-- Header -->
+            <header class="quiz-header">
+                <div class="header-content">
+                    <h1 id="quiz-title">퀴즈 제목</h1>
+                    <div class="quiz-info">
+                        <span id="quiz-difficulty" class="difficulty-badge">난이도</span>
+                        <span id="quiz-count" class="quiz-count">문제 수</span>
+                    </div>
+                    <p id="quiz-description" class="quiz-description">퀴즈 설명</p>
+                </div>
+            </header>
+
+            <!-- Quiz Content -->
+            <main class="quiz-content">
+                <!-- Start Screen -->
+                <div id="start-screen" class="start-screen">
+                    <div class="start-content">
+                        <div class="quiz-preview">
+                            <h3>🎯 퀴즈 미리보기</h3>
+                            <div class="preview-stats">
+                                <div class="stat">
+                                    <span class="stat-number" id="total-questions">0</span>
+                                    <span class="stat-label">문제</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-number" id="estimated-time">0</span>
+                                    <span class="stat-label">분 예상</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="start-quiz-btn" class="start-btn">퀴즈 시작하기</button>
+                    </div>
+                </div>
+
+                <!-- Quiz Screen -->
+                <div id="quiz-screen" style="display: none;">
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="current-question">1</span> / <span id="total-questions-text">10</span>
+                        </div>
+                    </div>
+
+                    <div class="question-container">
+                        <h2 id="current-question-text" class="question-text">질문이 여기에 표시됩니다</h2>
+                        <div id="options-container" class="options-container">
+                            <!-- Options will be dynamically inserted here -->
+                        </div>
+                    </div>
+
+                    <div class="quiz-controls">
+                        <button id="prev-btn" class="control-btn secondary" disabled>이전 문제</button>
+                        <button id="next-btn" class="control-btn primary" disabled>다음 문제</button>
+                        <button id="finish-btn" class="control-btn primary" style="display: none;">완료</button>
+                    </div>
+                </div>
+
+                <!-- Result Screen -->
+                <div id="result-screen" style="display: none;">
+                    <div class="result-content">
+                        <div class="result-header">
+                            <h2>🎉 퀴즈 완료!</h2>
+                            <div class="score-display">
+                                <span id="final-score" class="score-number">0</span>
+                                <span class="score-total">/ <span id="final-total">0</span></span>
+                            </div>
+                            <div id="score-percentage" class="score-percentage">0%</div>
+                        </div>
+                        
+                        <div class="result-details">
+                            <div class="result-stats">
+                                <div class="stat">
+                                    <span id="correct-answers" class="stat-number">0</span>
+                                    <span class="stat-label">정답</span>
+                                </div>
+                                <div class="stat">
+                                    <span id="wrong-answers" class="stat-number">0</span>
+                                    <span class="stat-label">오답</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="result-actions">
+                            <button id="restart-btn" class="control-btn primary">다시 시작</button>
+                            <button id="review-btn" class="control-btn secondary">정답 보기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Screen -->
+                <div id="review-screen" style="display: none;">
+                    <div class="review-content">
+                        <h2>📝 정답 및 해설</h2>
+                        <div id="review-container">
+                            <!-- Review items will be dynamically inserted here -->
+                        </div>
+                        <div class="review-actions">
+                            <button id="back-to-result-btn" class="control-btn secondary">결과로 돌아가기</button>
+                            <button id="restart-from-review-btn" class="control-btn primary">다시 시작</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="quiz-footer">
+        <p>Powered by Quiz Generator</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
