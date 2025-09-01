@@ -24,6 +24,71 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// UTF-8 safe Base64 decoding function
+function base64ToUtf8(base64) {
+    try {
+        // Decode base64 to binary string
+        const binaryString = atob(base64);
+        
+        // Convert binary string to bytes
+        const bytes = new Uint8Array(binaryString.length);
+        for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        
+        // Use TextDecoder for proper UTF-8 decoding
+        // This handles multi-byte UTF-8 sequences correctly
+        if (typeof TextDecoder !== 'undefined') {
+            const decoder = new TextDecoder('utf-8', { fatal: false });
+            return decoder.decode(bytes);
+        }
+        
+        // Fallback for older browsers: Manual UTF-8 decoding
+        let result = '';
+        let i = 0;
+        while (i < bytes.length) {
+            const byte1 = bytes[i++];
+            
+            if (byte1 < 0x80) {
+                // 1-byte sequence (ASCII)
+                result += String.fromCharCode(byte1);
+            } else if ((byte1 & 0xe0) === 0xc0) {
+                // 2-byte sequence
+                if (i < bytes.length) {
+                    const byte2 = bytes[i++];
+                    const codePoint = ((byte1 & 0x1f) << 6) | (byte2 & 0x3f);
+                    result += String.fromCharCode(codePoint);
+                }
+            } else if ((byte1 & 0xf0) === 0xe0) {
+                // 3-byte sequence (most Korean characters)
+                if (i + 1 < bytes.length) {
+                    const byte2 = bytes[i++];
+                    const byte3 = bytes[i++];
+                    const codePoint = ((byte1 & 0x0f) << 12) | ((byte2 & 0x3f) << 6) | (byte3 & 0x3f);
+                    result += String.fromCharCode(codePoint);
+                }
+            } else if ((byte1 & 0xf8) === 0xf0) {
+                // 4-byte sequence (emoji, etc)
+                if (i + 2 < bytes.length) {
+                    const byte2 = bytes[i++];
+                    const byte3 = bytes[i++];
+                    const byte4 = bytes[i++];
+                    let codePoint = ((byte1 & 0x07) << 18) | ((byte2 & 0x3f) << 12) | ((byte3 & 0x3f) << 6) | (byte4 & 0x3f);
+                    // Convert to surrogate pair for JavaScript
+                    codePoint -= 0x10000;
+                    result += String.fromCharCode(0xd800 + (codePoint >> 10));
+                    result += String.fromCharCode(0xdc00 + (codePoint & 0x3ff));
+                }
+            }
+        }
+        
+        return result;
+    } catch (error) {
+        console.error('Base64 decoding error:', error);
+        throw error;
+    }
+}
+
 // Load Quiz Data from URL Parameters
 function loadQuizFromURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -36,9 +101,9 @@ function loadQuizFromURL() {
     }
 
     try {
-        // Decode Base64 data
-        const decodedData = atob(encodedData);
-        quizData = JSON.parse(decodedData);
+        // Decode Base64 data with proper UTF-8 support
+        const jsonString = base64ToUtf8(encodedData);
+        quizData = JSON.parse(jsonString);
         
         console.log('Loaded quiz data:', quizData);
         

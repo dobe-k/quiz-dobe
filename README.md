@@ -22,7 +22,7 @@
 
 ### URL 형식
 ```
-https://dobeh.github.io/quiz-dobe/?quiz=[Base64_인코딩된_퀴즈_데이터]
+https://dobe-k.github.io/quiz-dobe/?quiz=[Base64_인코딩된_퀴즈_데이터]
 ```
 
 ### 퀴즈 데이터 형식
@@ -54,7 +54,7 @@ https://dobeh.github.io/quiz-dobe/?quiz=[Base64_인코딩된_퀴즈_데이터]
 ### 로컬 개발
 ```bash
 # 레포지토리 클론
-git clone https://github.com/dobeh/quiz-dobe.git
+git clone https://github.com/dobe-k/quiz-dobe.git
 cd quiz-dobe
 
 # 로컬 서버 실행 (Python 3 기준)
@@ -83,7 +83,7 @@ debugQuiz(); // 퀴즈 데이터, 사용자 답안, 점수 등 출력
 
 1. **퀴즈 데이터 준비**: 위 JSON 형식으로 데이터 구성
 2. **Base64 인코딩**: `btoa(JSON.stringify(quizData))`
-3. **URL 생성**: `https://dobeh.github.io/quiz-dobe/?quiz=${encodedData}`
+3. **URL 생성**: `https://dobe-k.github.io/quiz-dobe/?quiz=${encodedData}`
 4. **공유**: 생성된 URL을 복사/공유
 
 ## 📊 성능 최적화
@@ -107,7 +107,7 @@ debugQuiz(); // 퀴즈 데이터, 사용자 답안, 점수 등 출력
 
 ## 🌟 데모
 
-실제 작동 예시: [Demo Link](https://dobeh.github.io/quiz-dobe/)
+실제 작동 예시: [Demo Link](https://dobe-k.github.io/quiz-dobe/)
 
 ---
 
