@@ -101,8 +101,20 @@ function loadQuizFromURL() {
     }
 
     try {
+        // Fix URL encoding issues with Base64 data
+        // Replace URL-safe characters back to standard Base64
+        let fixedEncodedData = encodedData
+            .replace(/-/g, '+')     // URL-safe minus to plus
+            .replace(/_/g, '/')     // URL-safe underscore to slash
+            .replace(/ /g, '+');    // Space (from URL) back to plus
+        
+        // Add padding if necessary
+        while (fixedEncodedData.length % 4 !== 0) {
+            fixedEncodedData += '=';
+        }
+        
         // Decode Base64 data with proper UTF-8 support
-        const jsonString = base64ToUtf8(encodedData);
+        const jsonString = base64ToUtf8(fixedEncodedData);
         quizData = JSON.parse(jsonString);
         
         console.log('Loaded quiz data:', quizData);
